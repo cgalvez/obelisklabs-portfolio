@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(NODE_OPTIONS=\"--use-system-ca\" npx create-next-app@latest . --typescript --tailwind --app --src-dir --no-eslint --import-alias \"@/*\" --yes)",
+      "Read(//mnt/c/Program Files/Google/Chrome/**)",
+      "Read(//c/Program Files/Google/Chrome/Application//**)",
+      "Bash('/c/Program Files/Google/Chrome/Application/chrome.exe' --headless=new --disable-gpu --screenshot=/tmp/portfolio.png --window-size=1280,900 --hide-scrollbars http://localhost:3000)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(pkill -f \"next dev\")"
+    ]
+  }
+}
