@@ -118,7 +118,7 @@ function Hero() {
 
         {/* Description */}
         <p className="text-[#8b90a0] text-base sm:text-lg leading-7 max-w-lg">
-          Un espacio donde las ideas se convierten en productos reales.
+          Un espacio donde las ideas se convierten en realidad.
           Código artesanal, arquitecturas sólidas y proyectos construidos
           para <span className="text-[#c1c6d7]">perdurar</span>.
         </p>
@@ -164,10 +164,10 @@ const PILLARS = [
     accent: "green" as const,
   },
   {
-    icon: "🔓",
-    title: "Open source",
-    body: "El conocimiento se comparte. Parte del trabajo disponible para la comunidad — para aprender, bifurcar y colaborar.",
-    accent: "gray" as const,
+    icon: "🧪",
+    title: "I+D constante",
+    body: "Un espacio para investigar y aprender. Experimentando siempre con tecnologías emergentes, nuevos frameworks y metodologías.",
+    accent: "purple" as const,
   },
 ];
 
@@ -304,7 +304,6 @@ function Projects() {
             </p>
             <p className="text-[#8b90a0] text-sm max-w-xs leading-6">
               Los primeros proyectos de ObeliskLabs están en construcción.
-              Vuelve pronto.
             </p>
           </div>
         ) : (
