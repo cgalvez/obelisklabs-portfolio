@@ -149,6 +149,78 @@ sudo certbot --nginx -d tudominio.com -d www.tudominio.com
 
 Certbot modifica el virtualhost automáticamente para redirigir HTTP → HTTPS.
 
+---
+
+## Umami Analytics (autoalojado)
+
+Umami es una instancia **independiente del portfolio**: vive en su propia carpeta del servidor y puedes añadirle cualquier web futura sin tocar el portfolio.
+
+### 1. Desplegar Umami en el servidor
+
+```bash
+mkdir -p /opt/umami
+# Copia docker-compose.umami.yml y .env.umami.example del repo
+cp docker-compose.umami.yml /opt/umami/docker-compose.yml
+cp .env.umami.example /opt/umami/.env
+```
+
+Rellena `/opt/umami/.env` con secretos generados:
+
+```bash
+echo "UMAMI_DB_PASSWORD=$(openssl rand -hex 32)" >> /opt/umami/.env
+echo "UMAMI_APP_SECRET=$(openssl rand -hex 32)"  >> /opt/umami/.env
+```
+
+Levanta Umami:
+
+```bash
+cd /opt/umami && docker compose up -d
+```
+
+### 2. Virtualhost Nginx para el subdominio
+
+Apunta `analytics.obelisklabs.dev` a la IP del servidor y añade:
+
+```nginx
+server {
+    listen 80;
+    server_name analytics.obelisklabs.dev;
+
+    location / {
+        proxy_pass http://localhost:3003;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+
+```bash
+sudo nginx -t && sudo systemctl reload nginx
+sudo certbot --nginx -d analytics.obelisklabs.dev
+```
+
+### 3. Crear el sitio y conectarlo al portfolio
+
+1. Entra en `https://analytics.obelisklabs.dev`  
+   (credenciales por defecto: `admin` / `umami` — cámbialas al primer login)
+2. **Añade un sitio** → copia el **Website ID**
+3. En `/opt/portfolio-cgc/.env` añade:
+   ```
+   NEXT_PUBLIC_UMAMI_ID=<website-id>
+   ```
+4. Redespliega el portfolio:
+   ```bash
+   cd /opt/portfolio-cgc && docker compose up -d --build
+   ```
+
+Para trackear webs adicionales en el futuro basta con añadir un sitio nuevo en Umami y repetir el paso 3 para cada proyecto.
+
 ### 5. Configurar Traefik (alternativa a Nginx)
 
 Si ya usas Traefik en tu stack de Hetzner, actualiza `docker-compose.yml`:

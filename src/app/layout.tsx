@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const inter = Inter({
@@ -60,11 +61,21 @@ export const metadata: Metadata = {
   },
 };
 
+const UMAMI_ID = process.env.NEXT_PUBLIC_UMAMI_ID;
+const UMAMI_URL = SITE_URL.replace("://", "://analytics.");
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className={`${inter.variable} ${geistMono.variable}`}>
       <body className="antialiased font-[var(--font-sans)]">
         {children}
+        {UMAMI_ID && (
+          <Script
+            src={`${UMAMI_URL}/script.js`}
+            data-website-id={UMAMI_ID}
+            strategy="afterInteractive"
+          />
+        )}
       </body>
     </html>
   );
