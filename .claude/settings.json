@@ -6,7 +6,11 @@
       "Read(//c/Program Files/Google/Chrome/Application//**)",
       "Bash('/c/Program Files/Google/Chrome/Application/chrome.exe' --headless=new --disable-gpu --screenshot=/tmp/portfolio.png --window-size=1280,900 --hide-scrollbars http://localhost:3000)",
       "Bash(echo \"exit: $?\")",
-      "Bash(pkill -f \"next dev\")"
+      "Bash(pkill -f \"next dev\")",
+      "Bash(rm \"c:/Users/Carlos/projects/portfolio_cgc/src/components/Analytics.tsx\")"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\Carlos\\projects\\portfolio_cgc\\src\\components"
     ]
   }
 }

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Analytics from "@/components/Analytics";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -66,7 +65,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es" className={`${inter.variable} ${geistMono.variable}`}>
       <body className="antialiased font-[var(--font-sans)]">
         {children}
-        <Analytics />
       </body>
     </html>
   );
