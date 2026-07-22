@@ -99,21 +99,23 @@ function Hero() {
         </div>
 
         {/* Wordmark */}
-        <div className="flex flex-col items-center gap-3">
-          <h1
-            className="text-[56px] sm:text-[72px] font-bold leading-none tracking-[-0.03em]"
-            style={{
-              background: "linear-gradient(135deg, #adc6ff 0%, #e5e2e1 50%, #4edea3 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-          >
-            ObeliskLabs
+        <div className="flex flex-col items-center">
+          <h1 className="flex flex-col items-center gap-3">
+            <span
+              className="text-[56px] sm:text-[72px] font-bold leading-none tracking-[-0.03em]"
+              style={{
+                background: "linear-gradient(135deg, #adc6ff 0%, #e5e2e1 50%, #4edea3 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              ObeliskLabs
+            </span>
+            <span className="text-[#8b90a0] font-[var(--font-mono)] text-xs tracking-[0.2em] uppercase">
+              Laboratorio personal de software
+            </span>
           </h1>
-          <p className="text-[#8b90a0] font-[var(--font-mono)] text-xs tracking-[0.2em] uppercase">
-            Laboratorio personal de software
-          </p>
         </div>
 
         {/* Description */}
@@ -121,6 +123,9 @@ function Hero() {
           Un espacio donde las ideas se convierten en realidad.
           Código artesanal, arquitecturas sólidas y proyectos construidos
           para <span className="text-[#c1c6d7]">perdurar</span>.
+          {" "}Detrás de ObeliskLabs está{" "}
+          <span className="text-[#c1c6d7]">Carlos Gálvez</span>,
+          {" "}desarrollador de backend y mobile con experiencia en sistemas distribuidos, APIs y aplicaciones híbridas.
         </p>
 
         {/* CTAs */}
@@ -154,19 +159,19 @@ const PILLARS = [
   {
     icon: "⚙️",
     title: "Ingeniería sólida",
-    body: "Cada proyecto diseñado con intención. Arquitecturas que escalan, código limpio y decisiones deliberadas — sin atajos.",
+    body: "Cada proyecto diseñado con intención. Arquitecturas que escalan, código limpio y decisiones deliberadas — sin atajos. De la base de datos al endpoint, cada capa construida para crecer sin romperse.",
     accent: "blue" as const,
   },
   {
     icon: "🚀",
     title: "Productos reales",
-    body: "No prototipos de papel. Software que llega a usuarios, resuelve problemas concretos y evoluciona con el tiempo.",
+    body: "No prototipos de papel. Software que llega a usuarios reales, resuelve problemas concretos y evoluciona con el tiempo. Del MVP al producto maduro, siempre con el foco en entregar valor tangible.",
     accent: "green" as const,
   },
   {
     icon: "🧪",
     title: "I+D constante",
-    body: "Un espacio para investigar y aprender. Experimentando siempre con tecnologías emergentes, nuevos frameworks y metodologías.",
+    body: "Un espacio para investigar y aprender sin límites. Experimentando con tecnologías emergentes, nuevos frameworks y metodologías modernas. La curiosidad técnica como motor: de sistemas distribuidos a edge computing.",
     accent: "purple" as const,
   },
 ];
@@ -343,6 +348,7 @@ function Contact() {
           <p className="text-[#8b90a0] text-base max-w-sm leading-7">
             Siempre abierto a colaboraciones, proyectos interesantes
             y conversaciones sobre software.
+            {" "}Si tienes una idea que quieres convertir en producto, o buscas un desarrollador con criterio para un reto ambicioso, escribe.
           </p>
           <a
             href="mailto:info@obelisklabs.dev"

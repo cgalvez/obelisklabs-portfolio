@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
@@ -59,6 +59,11 @@ export const metadata: Metadata = {
       follow: true,
     },
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 const UMAMI_ID = process.env.NEXT_PUBLIC_UMAMI_ID;
