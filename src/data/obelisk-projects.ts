@@ -34,4 +34,14 @@ export const obeliskProjects: ObeliskProject[] = [
     image: "/projects/geganters.png",
     imageBg: "#f4f2ee",
   },
+  {
+    id: "lobby",
+    name: "Lobby",
+    description:
+      "Algo se está cocinando en el laboratorio. Las cartas ya están sobre la mesa, pero todavía boca abajo: de momento no podemos desvelar nada más. Muy pronto, nueva partida.",
+    tags: ["Top secret", "En construcción"],
+    status: "wip",
+    image: "/projects/lobby.svg",
+    imageBg: "#0c0c0f",
+  },
 ];
