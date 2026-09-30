@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { useInView } from "@/hooks/useInView";
 import { obeliskProjects } from "@/data/obelisk-projects";
 import type { ObeliskProject } from "@/data/obelisk-projects";
@@ -245,34 +246,50 @@ function ProjectCard({ project, delay }: { project: ObeliskProject; delay: numbe
     <Wrapper
       {...(wrapperProps as object)}
       ref={ref as React.RefObject<HTMLAnchorElement & HTMLDivElement>}
-      className={`glass glass-hover rounded-2xl p-6 flex flex-col gap-4 transition-all duration-700 ${
+      className={`glass glass-hover rounded-2xl overflow-hidden flex flex-col transition-all duration-700 ${
         url ? "cursor-pointer" : ""
       } ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
       style={{ transitionDelay: `${delay}ms` }}
     >
-      <div className="flex items-start justify-between gap-3">
-        <h3 className="font-semibold text-[#e5e2e1] text-base">{project.name}</h3>
-        <span
-          className={`shrink-0 text-[10px] font-medium font-[var(--font-mono)] tracking-wider uppercase px-2 py-1 rounded-full border ${
-            STATUS_COLOR[project.status]
-          }`}
+      {project.image && (
+        <div
+          className="relative h-44 flex-shrink-0"
+          style={{ background: project.imageBg ?? "#1c1b1b" }}
         >
-          {STATUS_LABEL[project.status]}
-        </span>
-      </div>
-      <p className="text-[#8b90a0] text-sm leading-6 flex-1">{project.description}</p>
-      <div className="flex flex-wrap gap-1.5">
-        {project.tags.map((t) => (
-          <span key={t} className="tag">{t}</span>
-        ))}
-      </div>
-      {url && (
-        <div className="pt-1 border-t border-white/5">
-          <span className="text-xs text-[#adc6ff] font-medium">
-            {project.url ? "Ver proyecto" : "Ver código"} →
-          </span>
+          <Image
+            src={project.image}
+            alt={`Logo de ${project.name}`}
+            fill
+            sizes="(min-width: 1024px) 380px, (min-width: 768px) 50vw, 100vw"
+            className="object-contain p-6"
+          />
         </div>
       )}
+      <div className="p-6 flex flex-col gap-4 flex-1">
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="font-semibold text-[#e5e2e1] text-base">{project.name}</h3>
+          <span
+            className={`shrink-0 text-[10px] font-medium font-[var(--font-mono)] tracking-wider uppercase px-2 py-1 rounded-full border ${
+              STATUS_COLOR[project.status]
+            }`}
+          >
+            {STATUS_LABEL[project.status]}
+          </span>
+        </div>
+        <p className="text-[#8b90a0] text-sm leading-6 flex-1">{project.description}</p>
+        <div className="flex flex-wrap gap-1.5">
+          {project.tags.map((t) => (
+            <span key={t} className="tag">{t}</span>
+          ))}
+        </div>
+        {url && (
+          <div className="pt-1 border-t border-white/5">
+            <span className="text-xs text-[#adc6ff] font-medium">
+              {project.url ? "Ver proyecto" : "Ver código"} →
+            </span>
+          </div>
+        )}
+      </div>
     </Wrapper>
   );
 }
