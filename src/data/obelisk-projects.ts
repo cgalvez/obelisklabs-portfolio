@@ -1,8 +1,10 @@
+import type { Locale } from "@/i18n/config";
+
 export interface ObeliskProject {
   id: string;
   name: string;
-  description: string;
-  tags: string[];
+  description: Record<Locale, string>;
+  tags: Record<Locale, string[]>;
   status: "live" | "wip" | "soon";
   url?: string;
   github?: string;
@@ -15,9 +17,14 @@ export const obeliskProjects: ObeliskProject[] = [
   {
     id: "bhainepal",
     name: "Bhainepal",
-    description:
-      "Web de una ONG española que combate la anemia y la malnutrición infantil en orfanatos de Katmandú (Nepal). Presenta sus programas de salud, nutrición y educación, el impacto conseguido, la transparencia de sus cuentas y las opciones de donación y apadrinamiento.",
-    tags: ["Astro", "ONG", "Donaciones"],
+    description: {
+      es: "Web de una ONG española que combate la anemia y la malnutrición infantil en orfanatos de Katmandú (Nepal). Presenta sus programas de salud, nutrición y educación, el impacto conseguido, la transparencia de sus cuentas y las opciones de donación y apadrinamiento.",
+      ca: "Web d'una ONG espanyola que combat l'anèmia i la malnutrició infantil en orfenats de Katmandú (Nepal). Presenta els seus programes de salut, nutrició i educació, l'impacte aconseguit, la transparència dels seus comptes i les opcions de donació i apadrinament.",
+    },
+    tags: {
+      es: ["Astro", "ONG", "Donaciones"],
+      ca: ["Astro", "ONG", "Donacions"],
+    },
     status: "live",
     url: "https://bhainepal.obelisklabs.dev/",
     image: "/projects/bhainepal.webp",
@@ -26,9 +33,14 @@ export const obeliskProjects: ObeliskProject[] = [
   {
     id: "geganters",
     name: "Geganters",
-    description:
-      "Agenda unificada de cercaviles y directorio de gegants y gegantons de Mataró. Permite consultar las salidas del fin de semana, conocer las figuras de cada colla, guardar favoritos y que nuevas colles soliciten darse de alta.",
-    tags: ["Next.js", "Supabase", "Cultura popular"],
+    description: {
+      es: "Agenda unificada de cercaviles y directorio de gegants y gegantons de Mataró. Permite consultar las salidas del fin de semana, conocer las figuras de cada colla, guardar favoritos y que nuevas colles soliciten darse de alta.",
+      ca: "Agenda unificada de cercaviles i directori de gegants i gegantons de Mataró. Permet consultar les sortides del cap de setmana, conèixer les figures de cada colla, desar preferits i que noves colles sol·licitin donar-se d'alta.",
+    },
+    tags: {
+      es: ["Next.js", "Supabase", "Cultura popular"],
+      ca: ["Next.js", "Supabase", "Cultura popular"],
+    },
     status: "live",
     url: "https://geganters.obelisklabs.dev/",
     image: "/projects/geganters.png",
@@ -37,9 +49,14 @@ export const obeliskProjects: ObeliskProject[] = [
   {
     id: "lobby",
     name: "Lobby",
-    description:
-      "Algo se está cocinando en el laboratorio. Las cartas ya están sobre la mesa, pero todavía boca abajo: de momento no podemos desvelar nada más. Muy pronto, nueva partida.",
-    tags: ["Top secret", "En construcción"],
+    description: {
+      es: "Algo se está cocinando en el laboratorio. Las cartas ya están sobre la mesa, pero todavía boca abajo: de momento no podemos desvelar nada más. Muy pronto, nueva partida.",
+      ca: "Alguna cosa s'està coent al laboratori. Les cartes ja són sobre la taula, però encara de cara avall: de moment no podem revelar res més. Molt aviat, nova partida.",
+    },
+    tags: {
+      es: ["Top secret", "En construcción"],
+      ca: ["Top secret", "En construcció"],
+    },
     status: "wip",
     image: "/projects/lobby.svg",
     imageBg: "#0c0c0f",

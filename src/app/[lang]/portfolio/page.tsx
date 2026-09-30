@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { defaultLocale } from "@/i18n/config";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
@@ -13,7 +15,11 @@ export const metadata: Metadata = {
   description: "BackEnd Developer & Android Developer. Más de 6 años construyendo sistemas escalables y apps Android.",
 };
 
-export default function PortfolioPage() {
+export default async function PortfolioPage({ params }: PageProps<"/[lang]/portfolio">) {
+  // El portfolio solo está disponible en castellano
+  const { lang } = await params;
+  if (lang !== defaultLocale) notFound();
+
   return (
     <>
       <Nav />

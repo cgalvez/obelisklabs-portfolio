@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useInView } from "@/hooks/useInView";
 import { obeliskProjects } from "@/data/obelisk-projects";
 import type { ObeliskProject } from "@/data/obelisk-projects";
+import { locales, localePath, type Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/dictionaries";
 
 /* ─── Logo ─────────────────────────────────────────────────────────── */
 
@@ -41,7 +43,34 @@ function ObeliskMark({ size = 64, className = "" }: { size?: number; className?:
 
 /* ─── Nav ───────────────────────────────────────────────────────────── */
 
-function Nav() {
+function LanguageSwitcher({ lang, label }: { lang: Locale; label: string }) {
+  return (
+    <div
+      role="group"
+      aria-label={label}
+      className="flex items-center gap-1 font-[var(--font-mono)] text-xs"
+    >
+      {locales.map((l, i) => (
+        <span key={l} className="flex items-center gap-1">
+          {i > 0 && <span className="text-[#414755]">/</span>}
+          <a
+            href={localePath(l)}
+            hrefLang={l}
+            lang={l}
+            aria-current={l === lang ? "true" : undefined}
+            className={`uppercase tracking-wider transition-colors ${
+              l === lang ? "text-[#e5e2e1]" : "text-[#8b90a0] hover:text-[#e5e2e1]"
+            }`}
+          >
+            {l}
+          </a>
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function Nav({ lang, t }: { lang: Locale; t: Dictionary["nav"] }) {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 24);
@@ -60,10 +89,13 @@ function Nav() {
           <ObeliskMark size={20} />
           <span className="font-semibold text-[#e5e2e1] tracking-tight">ObeliskLabs</span>
         </div>
-        <nav className="hidden sm:flex items-center gap-6 text-sm text-[#8b90a0]">
-          <a href="#proyectos" className="hover:text-[#e5e2e1] transition-colors">Proyectos</a>
-          <a href="#contacto" className="hover:text-[#e5e2e1] transition-colors">Contacto</a>
-        </nav>
+        <div className="flex items-center gap-6">
+          <nav className="hidden sm:flex items-center gap-6 text-sm text-[#8b90a0]">
+            <a href="#proyectos" className="hover:text-[#e5e2e1] transition-colors">{t.projects}</a>
+            <a href="#contacto" className="hover:text-[#e5e2e1] transition-colors">{t.contact}</a>
+          </nav>
+          <LanguageSwitcher lang={lang} label={t.language} />
+        </div>
       </div>
     </header>
   );
@@ -71,7 +103,7 @@ function Nav() {
 
 /* ─── Hero ──────────────────────────────────────────────────────────── */
 
-function Hero() {
+function Hero({ t }: { t: Dictionary["hero"] }) {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
       {/* Background grid */}
@@ -114,19 +146,17 @@ function Hero() {
               ObeliskLabs
             </span>
             <span className="text-[#8b90a0] font-[var(--font-mono)] text-xs tracking-[0.2em] uppercase">
-              Laboratorio personal de software
+              {t.tagline}
             </span>
           </h1>
         </div>
 
         {/* Description */}
         <p className="text-[#8b90a0] text-base sm:text-lg leading-7 max-w-lg">
-          Un espacio donde las ideas se convierten en realidad.
-          Código artesanal, arquitecturas sólidas y proyectos construidos
-          para <span className="text-[#c1c6d7]">perdurar</span>.
-          {" "}Detrás de ObeliskLabs está{" "}
+          {t.intro} <span className="text-[#c1c6d7]">{t.introHighlight}</span>.
+          {" "}{t.behind}{" "}
           <span className="text-[#c1c6d7]">Carlos Gálvez</span>,
-          {" "}desarrollador de backend y mobile con experiencia en sistemas distribuidos, APIs y aplicaciones híbridas.
+          {" "}{t.bio}
         </p>
 
         {/* CTAs */}
@@ -135,13 +165,13 @@ function Hero() {
             href="#proyectos"
             className="inline-flex items-center gap-2 bg-[#adc6ff] text-[#002e69] font-semibold px-5 py-2.5 rounded-lg hover:bg-[#c5d6ff] transition-colors text-sm"
           >
-            Explorar proyectos
+            {t.ctaProjects}
           </a>
           <a
             href="#contacto"
             className="inline-flex items-center gap-2 border border-[#414755] text-[#c1c6d7] font-medium px-5 py-2.5 rounded-lg hover:border-[#8b90a0] hover:text-[#e5e2e1] transition-all text-sm"
           >
-            Contacto
+            {t.ctaContact}
           </a>
         </div>
       </div>
@@ -156,28 +186,16 @@ function Hero() {
 
 /* ─── Pillars ───────────────────────────────────────────────────────── */
 
-const PILLARS = [
-  {
-    icon: "⚙️",
-    title: "Ingeniería sólida",
-    body: "Cada proyecto diseñado con intención. Arquitecturas que escalan, código limpio y decisiones deliberadas — sin atajos. De la base de datos al endpoint, cada capa construida para crecer sin romperse.",
-    accent: "blue" as const,
-  },
-  {
-    icon: "🚀",
-    title: "Productos reales",
-    body: "No prototipos de papel. Software que llega a usuarios reales, resuelve problemas concretos y evoluciona con el tiempo. Del MVP al producto maduro, siempre con el foco en entregar valor tangible.",
-    accent: "green" as const,
-  },
-  {
-    icon: "🧪",
-    title: "I+D constante",
-    body: "Un espacio para investigar y aprender sin límites. Experimentando con tecnologías emergentes, nuevos frameworks y metodologías modernas. La curiosidad técnica como motor: de sistemas distribuidos a edge computing.",
-    accent: "purple" as const,
-  },
+// Estilo de cada pilar, en el mismo orden que `pillars.items` del diccionario
+const PILLAR_STYLE = [
+  { icon: "⚙️", accent: "blue" as const },
+  { icon: "🚀", accent: "green" as const },
+  { icon: "🧪", accent: "purple" as const },
 ];
 
-function Pillars() {
+function Pillars({ t }: { t: Dictionary["pillars"] }) {
+  const pillars = t.items.map((item, i) => ({ ...item, ...PILLAR_STYLE[i] }));
+
   const { ref, inView } = useInView();
 
   return (
@@ -188,14 +206,14 @@ function Pillars() {
           className={`transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
         >
           <p className="text-xs font-medium tracking-[0.15em] uppercase text-[#4edea3] font-[var(--font-mono)] mb-4 text-center">
-            Filosofía
+            {t.label}
           </p>
           <h2 className="text-[32px] font-semibold text-center text-[#e5e2e1] tracking-[-0.01em] mb-12">
-            ¿Qué es ObeliskLabs?
+            {t.title}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {PILLARS.map((p, i) => (
+            {pillars.map((p, i) => (
               <div
                 key={p.title}
                 className="glass glass-hover rounded-2xl p-7 flex flex-col gap-4"
@@ -225,18 +243,23 @@ function Pillars() {
 
 /* ─── Projects ──────────────────────────────────────────────────────── */
 
-const STATUS_LABEL: Record<ObeliskProject["status"], string> = {
-  live: "Live",
-  wip: "En desarrollo",
-  soon: "Próximamente",
-};
 const STATUS_COLOR: Record<ObeliskProject["status"], string> = {
   live: "text-[#4edea3] border-[#4edea3]/30 bg-[#4edea3]/10",
   wip: "text-[#adc6ff] border-[#adc6ff]/30 bg-[#adc6ff]/10",
   soon: "text-[#8b90a0] border-white/10 bg-white/5",
 };
 
-function ProjectCard({ project, delay }: { project: ObeliskProject; delay: number }) {
+function ProjectCard({
+  project,
+  delay,
+  lang,
+  t,
+}: {
+  project: ObeliskProject;
+  delay: number;
+  lang: Locale;
+  t: Dictionary["projects"];
+}) {
   const { ref, inView } = useInView();
   const url = project.url || project.github;
   const Wrapper = url ? "a" : "div";
@@ -258,7 +281,7 @@ function ProjectCard({ project, delay }: { project: ObeliskProject; delay: numbe
         >
           <Image
             src={project.image}
-            alt={`Logo de ${project.name}`}
+            alt={`${t.logoAlt} ${project.name}`}
             fill
             sizes="(min-width: 1024px) 380px, (min-width: 768px) 50vw, 100vw"
             className="object-contain p-6"
@@ -273,19 +296,19 @@ function ProjectCard({ project, delay }: { project: ObeliskProject; delay: numbe
               STATUS_COLOR[project.status]
             }`}
           >
-            {STATUS_LABEL[project.status]}
+            {t.status[project.status]}
           </span>
         </div>
-        <p className="text-[#8b90a0] text-sm leading-6 flex-1">{project.description}</p>
+        <p className="text-[#8b90a0] text-sm leading-6 flex-1">{project.description[lang]}</p>
         <div className="flex flex-wrap gap-1.5">
-          {project.tags.map((t) => (
-            <span key={t} className="tag">{t}</span>
+          {project.tags[lang].map((tag) => (
+            <span key={tag} className="tag">{tag}</span>
           ))}
         </div>
         {url && (
           <div className="pt-1 border-t border-white/5">
             <span className="text-xs text-[#adc6ff] font-medium">
-              {project.url ? "Ver proyecto" : "Ver código"} →
+              {project.url ? t.viewProject : t.viewCode} →
             </span>
           </div>
         )}
@@ -294,7 +317,7 @@ function ProjectCard({ project, delay }: { project: ObeliskProject; delay: numbe
   );
 }
 
-function Projects() {
+function Projects({ lang, t }: { lang: Locale; t: Dictionary["projects"] }) {
   const { ref, inView } = useInView();
   const empty = obeliskProjects.length === 0;
 
@@ -306,10 +329,10 @@ function Projects() {
           className={`mb-12 transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
         >
           <p className="text-xs font-medium tracking-[0.15em] uppercase text-[#4edea3] font-[var(--font-mono)] mb-4">
-            Proyectos
+            {t.label}
           </p>
           <h2 className="text-[32px] font-semibold text-[#e5e2e1] tracking-[-0.01em]">
-            Trabajo destacado
+            {t.title}
           </h2>
         </div>
 
@@ -322,16 +345,16 @@ function Projects() {
               <ObeliskMark size={48} className="relative opacity-50" />
             </div>
             <p className="text-[#8b90a0] font-[var(--font-mono)] text-sm tracking-wider uppercase">
-              Próximamente
+              {t.emptyLabel}
             </p>
             <p className="text-[#8b90a0] text-sm max-w-xs leading-6">
-              Los primeros proyectos de ObeliskLabs están en construcción.
+              {t.emptyBody}
             </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {obeliskProjects.map((p, i) => (
-              <ProjectCard key={p.id} project={p} delay={i * 100} />
+              <ProjectCard key={p.id} project={p} delay={i * 100} lang={lang} t={t} />
             ))}
           </div>
         )}
@@ -342,7 +365,7 @@ function Projects() {
 
 /* ─── Contact ───────────────────────────────────────────────────────── */
 
-function Contact() {
+function Contact({ t }: { t: Dictionary["contact"] }) {
   const { ref, inView } = useInView();
 
   return (
@@ -356,22 +379,20 @@ function Contact() {
           style={{ background: "rgba(32,31,31,0.7)" }}
         >
           <p className="text-xs font-medium tracking-[0.15em] uppercase text-[#4edea3] font-[var(--font-mono)]">
-            Contacto
+            {t.label}
           </p>
           <h2 className="text-[28px] sm:text-[36px] font-semibold text-[#e5e2e1] tracking-tight max-w-md leading-tight">
-            ¿Tienes una idea que
-            <span className="text-[#adc6ff]"> merece existir</span>?
+            {t.titleStart}
+            <span className="text-[#adc6ff]"> {t.titleHighlight}</span>{t.titleEnd}
           </h2>
           <p className="text-[#8b90a0] text-base max-w-sm leading-7">
-            Siempre abierto a colaboraciones, proyectos interesantes
-            y conversaciones sobre software.
-            {" "}Si tienes una idea que quieres convertir en producto, o buscas un desarrollador con criterio para un reto ambicioso, escribe.
+            {t.body}
           </p>
           <a
             href="mailto:info@obelisklabs.dev"
             className="inline-flex items-center gap-2 bg-[#adc6ff] text-[#002e69] font-semibold px-6 py-3 rounded-lg hover:bg-[#c5d6ff] transition-colors"
           >
-            Hablemos →
+            {t.cta}
           </a>
         </div>
       </div>
@@ -381,7 +402,7 @@ function Contact() {
 
 /* ─── Footer ────────────────────────────────────────────────────────── */
 
-function Footer() {
+function Footer({ t }: { t: Dictionary["footer"] }) {
   return (
     <footer className="border-t border-white/5 py-10 px-6">
       <div className="max-w-[1200px] mx-auto flex items-center justify-center gap-2.5">
@@ -389,7 +410,7 @@ function Footer() {
         <div>
           <span className="font-semibold text-sm text-[#e5e2e1]">ObeliskLabs</span>
           <span className="text-[#414755] mx-2 text-sm">·</span>
-          <span className="text-[#8b90a0] text-sm">by Carlos Gálvez</span>
+          <span className="text-[#8b90a0] text-sm">{t.by}</span>
         </div>
       </div>
     </footer>
@@ -398,15 +419,15 @@ function Footer() {
 
 /* ─── Page ──────────────────────────────────────────────────────────── */
 
-export default function ObeliskLabsLanding() {
+export default function ObeliskLabsLanding({ lang, dict }: { lang: Locale; dict: Dictionary }) {
   return (
     <div className="min-h-screen bg-[#131313] text-[#e5e2e1]">
-      <Nav />
-      <Hero />
-      <Pillars />
-      <Projects />
-      <Contact />
-      <Footer />
+      <Nav lang={lang} t={dict.nav} />
+      <Hero t={dict.hero} />
+      <Pillars t={dict.pillars} />
+      <Projects lang={lang} t={dict.projects} />
+      <Contact t={dict.contact} />
+      <Footer t={dict.footer} />
     </div>
   );
 }
