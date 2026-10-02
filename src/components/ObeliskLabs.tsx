@@ -58,6 +58,8 @@ function LanguageSwitcher({ lang, label }: { lang: Locale; label: string }) {
             hrefLang={l}
             lang={l}
             aria-current={l === lang ? "true" : undefined}
+            data-umami-event="language-switch"
+            data-umami-event-to={l}
             className={`uppercase tracking-wider transition-colors ${
               l === lang ? "text-[#e5e2e1]" : "text-[#8b90a0] hover:text-[#e5e2e1]"
             }`}
@@ -263,7 +265,15 @@ function ProjectCard({
   const { ref, inView } = useInView();
   const url = project.url || project.github;
   const Wrapper = url ? "a" : "div";
-  const wrapperProps = url ? { href: url, target: "_blank", rel: "noopener noreferrer" } : {};
+  const wrapperProps = url
+    ? {
+        href: url,
+        target: "_blank",
+        rel: "noopener noreferrer",
+        "data-umami-event": "project-click",
+        "data-umami-event-project": project.id,
+      }
+    : {};
 
   return (
     <Wrapper
@@ -390,6 +400,7 @@ function Contact({ t }: { t: Dictionary["contact"] }) {
           </p>
           <a
             href="mailto:info@obelisklabs.dev"
+            data-umami-event="contact-email"
             className="inline-flex items-center gap-2 bg-[#adc6ff] text-[#002e69] font-semibold px-6 py-3 rounded-lg hover:bg-[#c5d6ff] transition-colors"
           >
             {t.cta}

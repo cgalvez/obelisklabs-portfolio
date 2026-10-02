@@ -32,13 +32,15 @@ export default function Contact() {
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="mailto:carlos.galvez@bekodo.com"
+              href="mailto:info@obelisklabs.dev"
+              data-umami-event="contact-email"
               className="inline-flex items-center justify-center gap-2 bg-[#adc6ff] text-[#002e69] font-semibold px-7 py-3 rounded-xl hover:bg-[#c5d6ff] transition-colors duration-200 text-sm"
             >
               Enviar email
             </a>
             <a
               href="https://linkedin.com/in/carlosgalvezchaves"
+              data-umami-event="contact-linkedin"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 border border-[#414755] text-[#c1c6d7] font-medium px-7 py-3 rounded-xl hover:border-[#adc6ff]/40 hover:text-[#e5e2e1] transition-all duration-200 text-sm"
@@ -50,7 +52,7 @@ export default function Contact() {
           {/* Quick info */}
           <div className="flex flex-wrap justify-center gap-6 mt-10 pt-8 border-t border-white/5">
             {[
-              { label: "Email", value: "carlos.galvez@bekodo.com" },
+              { label: "Email", value: "info@obelisklabs.dev" },
               { label: "Ubicación", value: "España · Remoto" },
               { label: "Disponibilidad", value: "Inmediata" },
             ].map((item) => (

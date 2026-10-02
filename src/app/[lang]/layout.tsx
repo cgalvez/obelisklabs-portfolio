@@ -83,7 +83,9 @@ export const viewport: Viewport = {
 };
 
 const UMAMI_ID = process.env.NEXT_PUBLIC_UMAMI_ID;
-const UMAMI_URL = SITE_URL.replace("://", "://analytics.");
+const UMAMI_URL = process.env.NEXT_PUBLIC_UMAMI_URL || SITE_URL.replace("://", "://stats.");
+// Solo registra visitas en el dominio público (ignora localhost y previews)
+const UMAMI_DOMAINS = new URL(SITE_URL).hostname;
 
 export default async function RootLayout({ children, params }: LayoutProps<"/[lang]">) {
   const { lang } = await params;
@@ -97,6 +99,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
           <Script
             src={`${UMAMI_URL}/script.js`}
             data-website-id={UMAMI_ID}
+            data-domains={UMAMI_DOMAINS}
             strategy="afterInteractive"
           />
         )}

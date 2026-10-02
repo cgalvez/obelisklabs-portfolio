@@ -1,14 +1,18 @@
 services:
   portfolio:
-    build: .
+    build:
+      context: .
+      # NEXT_PUBLIC_* se incrustan al compilar: tienen que llegar como build args
+      args:
+        - NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL:-https://obelisklabs.dev}
+        - NEXT_PUBLIC_UMAMI_ID=${NEXT_PUBLIC_UMAMI_ID:-}
+        - NEXT_PUBLIC_UMAMI_URL=${NEXT_PUBLIC_UMAMI_URL:-}
     container_name: portfolio-cgc
     ports:
       - "3002:3000"
     restart: unless-stopped
     environment:
       - NODE_ENV=production
-      - NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL:-https://obelisklabs.dev}
-      - NEXT_PUBLIC_UMAMI_ID=${NEXT_PUBLIC_UMAMI_ID:-}
 
   portfolio-dev:
     image: node:20-alpine

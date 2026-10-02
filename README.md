@@ -151,75 +151,45 @@ Certbot modifica el virtualhost automáticamente para redirigir HTTP → HTTPS.
 
 ---
 
-## Umami Analytics (autoalojado)
+## Umami Analytics (Coolify)
 
-Umami es una instancia **independiente del portfolio**: vive en su propia carpeta del servidor y puedes añadirle cualquier web futura sin tocar el portfolio.
+Umami corre en Coolify como servicio independiente en `https://stats.obelisklabs.dev`, así que puedes añadirle cualquier web futura sin tocar el portfolio.
 
-### 1. Desplegar Umami en el servidor
+### 1. Crear el sitio en Umami
 
-```bash
-mkdir -p /opt/umami
-# Copia docker-compose.umami.yml y .env.umami.example del repo
-cp docker-compose.umami.yml /opt/umami/docker-compose.yml
-cp .env.umami.example /opt/umami/.env
+1. Entra en `https://stats.obelisklabs.dev`
+2. **Settings → Websites → Add website** con el dominio `obelisklabs.dev`
+3. Copia el **Website ID**
+
+### 2. Conectarlo al portfolio en Coolify
+
+En el recurso del portfolio → **Environment Variables**, añade:
+
+```
+NEXT_PUBLIC_SITE_URL=https://obelisklabs.dev
+NEXT_PUBLIC_UMAMI_ID=<website-id>
+# Opcional: solo si Umami no está en stats.<dominio de NEXT_PUBLIC_SITE_URL>
+NEXT_PUBLIC_UMAMI_URL=https://stats.obelisklabs.dev
 ```
 
-Rellena `/opt/umami/.env` con secretos generados:
+Marca las tres como **Build Variable** (en versiones recientes de Coolify: *Available at Buildtime*). Las `NEXT_PUBLIC_*` se incrustan al compilar: si solo están disponibles en runtime, el script de Umami no aparece en la web.
 
-```bash
-echo "UMAMI_DB_PASSWORD=$(openssl rand -hex 32)" >> /opt/umami/.env
-echo "UMAMI_APP_SECRET=$(openssl rand -hex 32)"  >> /opt/umami/.env
-```
+Después pulsa **Redeploy** (cada vez que cambien estas variables hay que volver a compilar).
 
-Levanta Umami:
+El script solo registra visitas en el dominio de `NEXT_PUBLIC_SITE_URL`, así que en local no se contamina la estadística.
 
-```bash
-cd /opt/umami && docker compose up -d
-```
+### Eventos registrados
 
-### 2. Virtualhost Nginx para el subdominio
+Aparecen en la pestaña **Events** del sitio en Umami:
 
-Apunta `analytics.obelisklabs.dev` a la IP del servidor y añade:
+| Evento | Dónde | Propiedad |
+| --- | --- | --- |
+| `project-click` | Tarjetas de proyecto (home y portfolio) | `project` |
+| `contact-email` | Botón de email | — |
+| `contact-linkedin` | Botón de LinkedIn (portfolio) | — |
+| `language-switch` | Selector ES / CA | `to` |
 
-```nginx
-server {
-    listen 80;
-    server_name analytics.obelisklabs.dev;
-
-    location / {
-        proxy_pass http://localhost:3003;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_cache_bypass $http_upgrade;
-    }
-}
-```
-
-```bash
-sudo nginx -t && sudo systemctl reload nginx
-sudo certbot --nginx -d analytics.obelisklabs.dev
-```
-
-### 3. Crear el sitio y conectarlo al portfolio
-
-1. Entra en `https://analytics.obelisklabs.dev`  
-   (credenciales por defecto: `admin` / `umami` — cámbialas al primer login)
-2. **Añade un sitio** → copia el **Website ID**
-3. En `/opt/portfolio-cgc/.env` añade:
-   ```
-   NEXT_PUBLIC_UMAMI_ID=<website-id>
-   ```
-4. Redespliega el portfolio:
-   ```bash
-   cd /opt/portfolio-cgc && docker compose up -d --build
-   ```
-
-Para trackear webs adicionales en el futuro basta con añadir un sitio nuevo en Umami y repetir el paso 3 para cada proyecto.
+Para trackear webs adicionales basta con añadir un sitio nuevo en Umami y repetir el paso 2 en cada proyecto.
 
 ### 5. Configurar Traefik (alternativa a Nginx)
 
