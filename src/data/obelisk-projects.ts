@@ -47,6 +47,22 @@ export const obeliskProjects: ObeliskProject[] = [
     imageBg: "#f4f2ee",
   },
   {
+    id: "cronobeat",
+    name: "Cronobeat",
+    description: {
+      es: "Juego musical de fiesta: escanea una carta, escucha un fragmento y adivina el año de la canción. Crea tu mazo pegando una lista o elige una de las predefinidas, imprime las cartas con QR en PDF y compártelo por enlace. Sin cuentas ni Spotify Premium.",
+      ca: "Joc musical de festa: escaneja una carta, escolta un fragment i endevina l'any de la cançó. Crea la teva baralla enganxant una llista o tria'n una de les predefinides, imprimeix les cartes amb QR en PDF i comparteix-la per enllaç. Sense comptes ni Spotify Premium.",
+    },
+    tags: {
+      es: ["Next.js", "iTunes API", "PDF + QR", "Juego"],
+      ca: ["Next.js", "iTunes API", "PDF + QR", "Joc"],
+    },
+    status: "live",
+    url: "https://cronobeat.obelisklabs.dev/",
+    image: "/projects/cronobeat.svg",
+    imageBg: "#15122b",
+  },
+  {
     id: "lobby",
     name: "Lobby",
     description: {
