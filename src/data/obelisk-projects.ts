@@ -63,6 +63,22 @@ export const obeliskProjects: ObeliskProject[] = [
     imageBg: "#15122b",
   },
   {
+    id: "bingo-musical",
+    name: "Bingo Musical",
+    description: {
+      es: "Bingo con canciones para jugar en persona: el anfitrión crea una sala y hace sonar fragmentos desde su dispositivo, y los jugadores se unen con un código o QR y marcan su cartón en el móvil en tiempo real. Con listas predefinidas o propias y validación de línea y bingo.",
+      ca: "Bingo amb cançons per jugar en persona: l'amfitrió crea una sala i fa sonar fragments des del seu dispositiu, i els jugadors s'hi uneixen amb un codi o QR i marquen el seu cartró al mòbil en temps real. Amb llistes predefinides o pròpies i validació de línia i bingo.",
+    },
+    tags: {
+      es: ["Next.js", "SQLite + Drizzle", "Tiempo real", "Juego"],
+      ca: ["Next.js", "SQLite + Drizzle", "Temps real", "Joc"],
+    },
+    status: "live",
+    url: "https://bingo.obelisklabs.dev/",
+    image: "/projects/bingo-musical.png",
+    imageBg: "#5b2bd6",
+  },
+  {
     id: "lobby",
     name: "Lobby",
     description: {
